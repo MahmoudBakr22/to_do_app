@@ -9,20 +9,27 @@ export default function useTaskForm(selectedTask = {}) {
   const [title, setTitle] = useState(selectedTask.title || "");
   const [description, setDescription] = useState(selectedTask.description || "");
 
+  const [isDirty, setIsDirty] = useState(false);
+
   const taskId = selectedTask.id;
   const isEdit = !!taskId;
 
   const updateTitle = (e) => {
+    setIsDirty(true);
     const value = e.target.value || "";
     setTitle(value);
   };
   const updateDescription = (e) => {
+    setIsDirty(true);
     const value = e.target.value || "";
     setDescription(value);
   };
 
   const submit = (e) => {
     e.preventDefault();
+    if (!isDirty) {
+      return;
+    }
     if (isEdit) {
       editTask(taskId, {
         title,
@@ -60,5 +67,6 @@ export default function useTaskForm(selectedTask = {}) {
     submit,
     isEdit: !!selectedTask.id,
     showDeleteTaskDialog,
+    isDirty,
   };
 }

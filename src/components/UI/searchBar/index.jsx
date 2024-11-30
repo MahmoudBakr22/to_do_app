@@ -14,7 +14,7 @@ export default function SearchBar() {
       <input
         onChange={search}
         placeholder="Find your task"
-        className="w-full bg-transparent pl-14 py-4 z-10 cursor-pointer border rounded-lg border-white/30 text-xs text-white/80 focus:outline-none placeholder:text-white/70"
+        className="w-full bg-transparent pl-14 py-4 z-10  border rounded-lg border-white/30 text-xs text-white/80 focus:outline-none placeholder:text-white/70"
       />
     </div>
   );

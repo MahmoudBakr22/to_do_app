@@ -1,15 +1,8 @@
 import useTaskForm from "./useTaskForm";
 
 export default function TaskForm({ selectedTask = {} }) {
-  const {
-    title,
-    updateTitle,
-    description,
-    updateDescription,
-    submit,
-    isEdit,
-    showDeleteTaskDialog,
-  } = useTaskForm(selectedTask);
+  const { title, updateTitle, description, updateDescription, submit, isEdit, isDirty } =
+    useTaskForm(selectedTask);
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -57,18 +50,10 @@ export default function TaskForm({ selectedTask = {} }) {
             <button
               type="submit"
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              style={!isDirty ? { backgroundColor: "gray", cursor: "default" } : {}}
             >
               {isEdit ? "Edit" : "Create"}
             </button>
-            {isEdit && (
-              <button
-                type="button"
-                onClick={showDeleteTaskDialog}
-                className="mt-4 flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Delete
-              </button>
-            )}
           </div>
         </form>
       </div>

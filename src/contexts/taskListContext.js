@@ -5,6 +5,7 @@ import {
   useContext,
   useEffect,
   useLayoutEffect,
+  useRef,
   useState,
 } from "react";
 
@@ -12,10 +13,24 @@ const TasksListContext = createContext();
 
 export function TasksListContextProvider({ children }) {
   const [tasksList, setTasksList] = useState(null);
+  const savedTasks = useRef([]);
+
+  const updateLocalStorage = useCallback(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasksList));
+  }, [tasksList]);
+
+  useLayoutEffect(() => {
+    savedTasks.current = getTaskFromLocalStorage();
+    setTasksList(savedTasks.current);
+  }, []);
+
+  useEffect(() => {
+    updateLocalStorage();
+  }, [tasksList, updateLocalStorage]);
 
   const searchTask = (query) => {
     const lowerQ = query.toLowerCase();
-    const list = savedTasks.filter(({ title, description = "" }) => {
+    const list = savedTasks.current.filter(({ title, description = "" }) => {
       const lowerT = title.toLowerCase();
       const lowerD = description.toLowerCase();
 
@@ -60,10 +75,6 @@ export function TasksListContextProvider({ children }) {
     setTasksList(newList);
   };
 
-  const updateLocalStorage = useCallback(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasksList));
-  }, [tasksList]);
-
   function getTaskFromLocalStorage() {
     const result = localStorage.getItem("tasks");
     if (result) {
@@ -72,14 +83,6 @@ export function TasksListContextProvider({ children }) {
       return [];
     }
   }
-
-  useLayoutEffect(() => {
-    setTasksList(getTaskFromLocalStorage());
-  }, []);
-
-  useEffect(() => {
-    updateLocalStorage();
-  }, [tasksList, updateLocalStorage]);
 
   return (
     <TasksListContext.Provider
